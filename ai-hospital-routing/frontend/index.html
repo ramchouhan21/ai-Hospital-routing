@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Hospital Routing System</title>
+    <!-- Google Fonts: Inter for premium typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons for clean, modern iconography -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Floating SOS Button -->
+    <button class="floating-sos sos-trigger" aria-label="Emergency SOS">
+        <i class="bi bi-telephone-fill"></i>
+    </button>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <i class="bi bi-hospital text-accent"></i>
+                <span>MedRoute AI</span>
+            </a>
+            
+            <button class="mobile-toggle" aria-label="Toggle Menu">
+                <i class="bi bi-list"></i>
+            </button>
+
+            <ul class="nav-links" id="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Services</a></li>
+                <li><a href="#trust">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li>
+                    <button class="btn btn-sos sos-trigger">
+                        <i class="bi bi-exclamation-triangle-fill"></i> SOS
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container hero-container">
+            <div class="hero-content">
+                <h1>AI-Powered Smart <br><span class="text-accent">Hospital Routing</span></h1>
+                <h2>Faster decisions. Better care. Right hospital.</h2>
+                <p>In critical moments, every second counts. Our advanced AI engine instantly analyzes symptoms and live hospital capacities to guide you to the right medical facility.</p>
+                <div class="hero-buttons">
+                    <a href="input.html" class="btn btn-primary">Get Started</a>
+                    <a href="#features" class="btn btn-secondary">Find Hospitals Near You</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Modern Hospital and Medical Professionals" class="rounded-img hero-img">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features bg-light">
+        <div class="container">
+            <div class="section-title text-center">
+                <h2>Intelligent Healthcare Routing</h2>
+                <p>Cutting-edge AI algorithms designed to save lives when time matters most.</p>
+            </div>
+            <div class="features-grid">
+                <!-- Card 1 -->
+                <div class="feature-card">
+                    <div class="icon-wrapper">
+                        <i class="bi bi-cpu-fill"></i>
+                    </div>
+                    <h3>AI Decision Engine</h3>
+                    <p>Predictive algorithms analyze severity and suggest the most appropriate facility based on your unique needs.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="feature-card">
+                    <div class="icon-wrapper">
+                        <i class="bi bi-geo-alt-fill"></i>
+                    </div>
+                    <h3>Real-Time Tracking</h3>
+                    <p>Live GPS navigation with optimized routes considering traffic to ensure the fastest possible arrival time.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="feature-card">
+                    <div class="icon-wrapper">
+                        <i class="bi bi-ambulance"></i>
+                    </div>
+                    <h3>Emergency Priority</h3>
+                    <p>Critical cases are flagged and hospitals are pre-alerted so trauma teams are ready upon your arrival.</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="feature-card">
+                    <div class="icon-wrapper">
+                        <i class="bi bi-clipboard-pulse"></i>
+                    </div>
+                    <h3>Live Availability</h3>
+                    <p>Continuous synchronization with hospital databases to monitor bed availability and specialized equipment.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Section -->
+    <section id="trust" class="trust">
+        <div class="container trust-container">
+            <div class="trust-content">
+                <h2>Trusted Healthcare Assistance</h2>
+                <p>We partner with leading medical institutions to provide a seamless, reliable, and life-saving emergency routing ecosystem.</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <h3 class="text-accent">50+</h3>
+                        <p>Hospitals Supported</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3 class="text-accent">Live</h3>
+                        <p>Real-time decision system</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3 class="text-accent">24/7</h3>
+                        <p>Emergency-ready routing</p>
+                    </div>
+                </div>
+            </div>
+            <div class="trust-image">
+                <img src="https://images.unsplash.com/photo-1551076805-e18690c5e525?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Trusted Doctors" class="rounded-img">
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta">
+        <div class="container text-center">
+            <h2>Find the Right Hospital in Seconds</h2>
+            <p>Don't wait for an emergency. Experience how our AI routing works today.</p>
+            <a href="input.html" class="btn btn-primary btn-lg cta-btn">Get Started Now</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <i class="bi bi-hospital"></i>
+                        <span>MedRoute AI</span>
+                    </a>
+                    <p>Pioneering the future of emergency healthcare logistics and smart hospital routing.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#features">Services</a></li>
+                        <li><a href="input.html">Predict & Route</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contact Us</h4>
+                    <p><i class="bi bi-envelope"></i> support@medroute.ai</p>
+                    <p><i class="bi bi-telephone"></i> +1 (800) 123-4567</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 MedRoute AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

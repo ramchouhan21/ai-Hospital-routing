@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Input - MedRoute AI</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-alt">
+
+    <!-- Floating SOS Button -->
+    <button class="floating-sos sos-trigger" aria-label="Emergency SOS">
+        <i class="bi bi-telephone-fill"></i>
+    </button>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <i class="bi bi-hospital text-accent"></i>
+                <span>MedRoute AI</span>
+            </a>
+            
+            <button class="mobile-toggle" aria-label="Toggle Menu">
+                <i class="bi bi-list"></i>
+            </button>
+
+            <ul class="nav-links" id="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li>
+                    <button class="btn btn-sos sos-trigger">
+                        <i class="bi bi-exclamation-triangle-fill"></i> SOS
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="input-page-wrapper">
+        <div class="container">
+            <div class="input-grid">
+                
+                <!-- Left Column: Form -->
+                <div class="form-section">
+                    <div class="form-card shadow-lg">
+                        <div class="form-header">
+                            <h2>Patient Details & Symptoms</h2>
+                            <p>Please provide details to help our AI find the best hospital for you instantly.</p>
+                        </div>
+                        
+                        <form id="routing-form" class="routing-form">
+                            <!-- Basic Info -->
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="age">Age</label>
+                                    <input type="number" id="age" name="age" placeholder="e.g. 45" required min="0" max="120">
+                                </div>
+                                <div class="form-group">
+                                    <label for="gender">Gender</label>
+                                    <select id="gender" name="gender" required>
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Symptoms Input -->
+                            <div class="form-group">
+                                <label for="symptoms">Describe Symptoms</label>
+                                <div class="textarea-wrapper">
+                                    <textarea id="symptoms" name="symptoms" rows="4" placeholder="e.g. Severe chest pain, shortness of breath..." required></textarea>
+                                    <button type="button" id="voice-btn" class="voice-btn" aria-label="Voice Input">
+                                        <i class="bi bi-mic-fill"></i>
+                                    </button>
+                                </div>
+                                <div id="voice-status" class="voice-status">Tap microphone to speak</div>
+                            </div>
+
+                            <!-- Location Input -->
+                            <div class="form-group">
+                                <label>Your Location</label>
+                                <div class="location-wrapper">
+                                    <input type="text" id="location" name="location" placeholder="Address or Coordinates" readonly required>
+                                    <button type="button" id="gps-btn" class="btn btn-secondary btn-sm gps-btn">
+                                        <i class="bi bi-geo-alt-fill"></i> Detect Location
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-full" id="submit-btn">
+                                <i class="bi bi-search"></i> Find Right Hospital
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Right Column: Results (Hidden by Default) -->
+                <div class="results-section" id="results-section" style="display: none;">
+                    <div class="results-header">
+                        <h2>AI Recommendations</h2>
+                        <div class="severity-badge" id="severity-badge">
+                            <!-- Injected via JS -->
+                        </div>
+                    </div>
+                    
+                    <div class="loading-state" id="loading-state" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Analyzing symptoms and finding optimal routes...</p>
+                    </div>
+
+                    <div class="hospital-list" id="hospital-list">
+                        <!-- Hospital Cards Injected via JS -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+    <script src="input.js"></script>
+</body>
+</html>
