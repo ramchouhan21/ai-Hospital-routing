@@ -1,0 +1,14 @@
+Patient Report
+
+Symptoms: I have headache and fever and little cold
+Severity: Low
+
+Recommended Hospital: Local Clinic
+
+Reason:
+- ICU Available: No
+- Beds Available: 1
+- Distance: 1.0
+
+Conclusion:
+Hospital selected based on best resource availability and proximity.

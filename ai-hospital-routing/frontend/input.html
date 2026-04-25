@@ -122,6 +122,29 @@
                     </div>
                 </div>
 
+                <!-- Report Section (Next Slide) -->
+                <div class="results-section" id="report-section" style="display: none;">
+                    <div class="results-header">
+                        <h2>Patient Report</h2>
+                        <button type="button" class="btn btn-secondary btn-sm" id="back-to-results">
+                            <i class="bi bi-arrow-left"></i> Back
+                        </button>
+                    </div>
+                    
+                    <div class="report-container" style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                        <pre id="report-content" style="white-space: pre-wrap; font-family: 'Inter', sans-serif; font-size: 0.95rem; color: var(--clr-text-main);"></pre>
+                    </div>
+
+                    <div style="display: flex; gap: 15px; flex-direction: column;">
+                        <button type="button" class="btn btn-primary btn-full" id="start-navigation-btn">
+                            <i class="bi bi-cursor-fill"></i> Start Navigation
+                        </button>
+                        <button type="button" class="btn btn-outline btn-full" id="download-report-btn">
+                            <i class="bi bi-download"></i> Download Report (.txt)
+                        </button>
+                    </div>
+                </div>
+
             </div>
         </div>
     </main>

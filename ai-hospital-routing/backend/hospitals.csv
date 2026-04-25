@@ -1,11 +1,11 @@
-id,name,latitude,longitude,total_beds,available_beds,available_icu_beds,has_icu,has_trauma,traffic_level,specialties
-1,City Central Hospital,12.9716,77.5946,500,45,2,True,True,High,"Cardiology, Neurology, Trauma, Orthopedics"
-2,Mercy General Care,12.9611,77.6082,250,12,0,True,False,Medium,"General Surgery, Pediatrics, Internal Medicine"
-3,Westside Local Clinic,12.9854,77.5512,50,15,0,False,False,Low,"Urgent Care, Outpatient, General Practice"
-4,Apollo Specialty Hospital,12.9100,77.5995,600,20,5,True,True,High,"Cardiac Surgery, Oncology, Neurosurgery, Trauma"
-5,LifeCare Medical Center,12.9352,77.6245,150,30,1,True,False,Low,"Maternity, Pediatrics, General Medicine"
-6,QuickHeal Neighborhood Clinic,12.9512,77.5812,30,8,0,False,False,Low,"General Practice, Cold, Fever, Minor Injuries"
-7,Mother & Child Care Hospital,12.9212,77.6111,200,40,3,True,False,Medium,"Maternity, Gynecology, Pediatrics, Pregnancy"
-8,Govt Trauma & Emergency Center,12.9416,77.5746,800,0,0,True,True,High,"Trauma, Accident, Emergency, Surgery"
-9,Sunshine Family Clinic,12.9654,77.5912,40,20,0,False,False,Medium,"Headache, Fever, Orthopedics"
-10,Heart & Brain Super Specialty,12.9150,77.5895,300,10,4,True,True,Low,"Heart Attack, Cardiology, Stroke, Neurosurgery"
+id,name,distance,icu_available,beds_available,type
+1,City General Hospital,2,0,0,general
+2,Metro Emergency Center,5,1,10,emergency
+3,Apollo Hospital Bangalore,4,1,6,multispecialty
+4,Fortis Hospital Bangalore,6,1,8,multispecialty
+5,Victoria Hospital,3,1,2,government
+6,Local Clinic,1,0,1,clinic
+7,Nagarbhavi Health Center,2,0,3,clinic
+8,KR Puram Hospital,4,1,5,general
+9,Yeshwanthpur Care Center,3,0,2,clinic
+10,Hebbal Medical Center,5,1,7,general

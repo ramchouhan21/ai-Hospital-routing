@@ -51,9 +51,9 @@ ai-hospital-routing/
    ```
 4. Run the FastAPI server:
    ```bash
-   uvicorn backend.main:app --reload
+   uvicorn backend.main:app --reload --port 8050
    ```
-5. The API will be live at `http://localhost:8000`.
+5. The API will be live at `http://localhost:8050`.
 
 ### 2. Launch the Frontend
 Simply open `frontend/index.html` in any modern web browser. No local web server is strictly required for the UI, but using an extension like *Live Server* in VSCode is recommended for the best experience.

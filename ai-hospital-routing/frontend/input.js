@@ -13,6 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingState = document.getElementById('loading-state');
     const hospitalList = document.getElementById('hospital-list');
     const severityBadge = document.getElementById('severity-badge');
+    const reportSection = document.getElementById('report-section');
+    const backToResultsBtn = document.getElementById('back-to-results');
+    const reportContent = document.getElementById('report-content');
+    const startNavigationBtn = document.getElementById('start-navigation-btn');
+    const downloadReportBtn = document.getElementById('download-report-btn');
 
     // Default Fallback coordinates (Bangalore) if GPS fails
     let currentLat = 12.9716;
@@ -140,6 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             resultsSection.style.display = 'block';
+            reportSection.style.display = 'none';
             loadingState.style.display = 'block';
             hospitalList.innerHTML = '';
             severityBadge.innerHTML = '';
@@ -244,8 +250,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="hospital-stat-item" style="font-size: 0.85rem;"><i class="bi bi-shield-plus"></i> ${hospital.specialties}</div>
                     </div>
 
-                    <button class="btn btn-outline" onclick="window.open('https://maps.google.com/?q=${hospital.latitude},${hospital.longitude}', '_blank')">
-                        <i class="bi bi-cursor-fill"></i> Navigate Best Route
+                    <button type="button" class="btn btn-outline view-report-btn" data-lat="${hospital.latitude}" data-lng="${hospital.longitude}" data-name="${hospital.name}" data-icu="${hospital.available_icu_beds}" data-beds="${hospital.available_beds}" data-dist="${hospital.distance_km}">
+                        <i class="bi bi-file-earmark-medical"></i> View Report
                     </button>
                 </div>
             `;
@@ -255,5 +261,79 @@ document.addEventListener('DOMContentLoaded', () => {
             <p style="margin-bottom: 20px; color: var(--clr-text-muted); font-weight: 500;">${urgencyText}</p>
             ${htmlContent}
         `;
+        
+        // Add event listeners to the view report buttons
+        document.querySelectorAll('.view-report-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const dataset = e.currentTarget.dataset;
+                const symptoms = symptomsInput.value;
+                
+                // Show loading on button
+                const originalHtml = btn.innerHTML;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
+                btn.disabled = true;
+
+                try {
+                    const res = await fetch("http://127.0.0.1:8050/api/v1/generate_report", {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({
+                            symptoms: symptoms,
+                            severity: severity,
+                            hospital_name: dataset.name,
+                            icu_available: parseInt(dataset.icu) || 0,
+                            beds_available: parseInt(dataset.beds) || 0,
+                            distance_km: parseFloat(dataset.dist) || 0
+                        })
+                    });
+                    
+                    const data = await res.json();
+                    
+                    if(data.status === "success") {
+                        // Switch slides
+                        resultsSection.style.display = 'none';
+                        reportSection.style.display = 'block';
+                        
+                        // Set report content
+                        reportContent.textContent = data.report;
+                        
+                        // Setup Navigation Button
+                        startNavigationBtn.onclick = () => {
+                            window.open(`https://maps.google.com/?q=${dataset.lat},${dataset.lng}`, '_blank');
+                        };
+                        
+                        // Setup Download Button
+                        downloadReportBtn.onclick = () => {
+                            const blob = new Blob([data.report], { type: 'text/plain' });
+                            const url = window.URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = `Patient_Report_${dataset.name.replace(/\s+/g, '_')}.txt`;
+                            document.body.appendChild(a);
+                            a.click();
+                            window.URL.revokeObjectURL(url);
+                            document.body.removeChild(a);
+                        };
+                    } else {
+                        alert("Failed to generate report.");
+                    }
+                } catch(err) {
+                    console.error("Report generation failed:", err);
+                    alert("Error generating report. Check console.");
+                } finally {
+                    btn.innerHTML = originalHtml;
+                    btn.disabled = false;
+                }
+            });
+        });
+        
+        // Back button logic
+        if(backToResultsBtn) {
+            backToResultsBtn.onclick = () => {
+                reportSection.style.display = 'none';
+                resultsSection.style.display = 'block';
+            };
+        }
     }
 });

@@ -1,4 +1,5 @@
 from geopy.distance import geodesic
+import os
 
 def analyze_severity(symptoms: str):
     """
@@ -32,75 +33,128 @@ def analyze_severity(symptoms: str):
         # Default to Low for normal/minor symptoms
         return "Low", False
 
+def generate_report(symptoms, severity, hospital):
+    """
+    Automatically generate a patient report.
+    """
+    icu_status = "Yes" if hospital.get("available_icu_beds", 0) > 0 else "No"
+    
+    report = f"""Patient Report
+
+Symptoms: {symptoms}
+Severity: {severity}
+
+Recommended Hospital: {hospital.get('name')}
+
+Reason:
+- ICU Available: {icu_status}
+- Beds Available: {hospital.get('available_beds', 0)}
+- Distance: {hospital.get('distance_km', 0)}
+
+Conclusion:
+Hospital selected based on best resource availability and proximity."""
+    
+    return report
+
 def find_best_hospitals(user_lat, user_lng, symptoms, hospitals_data):
     """
-    Filters and ranks hospitals based on distance, traffic, ICU beds, and severity.
+    Filters and ranks hospitals using a scoring-based algorithm.
     """
-    severity, is_critical = analyze_severity(symptoms)
+    severity_raw, is_critical = analyze_severity(symptoms)
+    
+    # Map frontend severity to scoring logic severity
+    if severity_raw == "High":
+        severity = "critical"
+    elif severity_raw == "Medium":
+        severity = "moderate"
+    else:
+        severity = "low"
+        
     ranked_hospitals = []
     
     for h in hospitals_data:
-        h_lat = float(h['latitude'])
-        h_lng = float(h['longitude'])
+        distance = float(h.get('distance', 0))
+        icu_available = int(h.get('icu_available', 0))
+        beds_available = int(h.get('beds_available', 0))
+        h_type = h.get('type', 'general')
+        name = h.get('name', 'Unknown Hospital')
         
-        # Calculate distance
-        distance_km = geodesic((user_lat, user_lng), (h_lat, h_lng)).kilometers
+        # Implementing scoring logic based on requirements
+        score = 0
         
-        available_beds = int(h.get('available_beds', 0))
-        available_icu_beds = int(h.get('available_icu_beds', 0))
-        has_icu = str(h.get('has_icu')).lower() == 'true'
-        has_trauma = str(h.get('has_trauma')).lower() == 'true'
-        traffic_level = str(h.get('traffic_level', 'Medium')).title()
-        
-        # CRITICAL CONDITION FILTERING
-        if severity == "High":
-            # Must have ICU beds OR Trauma
-            # If a hospital is nearby but has 0 ICU beds/Normal beds, SKIP IT!
-            if available_icu_beds <= 0 or available_beds <= 0:
-                continue
-            if not (has_icu or has_trauma or "maternity" in str(h.get("specialties", "")).lower()):
-                continue
-
-        # LOW/MEDIUM CONDITION FILTERING
-        # Skip if no normal beds
-        if available_beds <= 0:
-            continue
+        # 1. Severity-based matching
+        if severity == "critical":
+            if icu_available == 1:
+                score += 50
+            else:
+                score -= 50
+                
+            # Critical patients need emergency or multispecialty
+            if h_type in ["emergency", "multispecialty"]:
+                score += 40
+            elif h_type == "clinic":
+                score -= 100 # Clinics cannot handle critical emergencies
+                
+            score += beds_available * 2
             
-        # Traffic time multiplier estimation
-        # Low traffic: 2 mins/km, Medium: 4 mins/km, High: 7 mins/km
-        traffic_multiplier = 4
-        if traffic_level == "Low":
-            traffic_multiplier = 2
-        elif traffic_level == "High":
-            traffic_multiplier = 7
+        elif severity == "moderate":
+            if h_type in ["general", "government", "multispecialty"]:
+                score += 30
+            elif h_type == "clinic":
+                score -= 10
+                
+            score += beds_available * 3
             
-        estimated_time_mins = int(distance_km * traffic_multiplier)
+        else: # low severity
+            # Minor issues should go to clinics or general hospitals to save emergency resources
+            if h_type in ["clinic", "general", "government"]:
+                score += 40
+            elif h_type == "emergency":
+                score -= 40 # Heavily penalize going to ER for a cold
+                
+            score += beds_available * 1
+            
+        # 2. Distance scoring (closer is always better)
+        score += max(0, 30 - distance * 3)
         
-        # Scoring Algorithm (Lower is better)
-        # Primary factor is TIME (not just distance). 
-        # Secondary factor: subtract a tiny bit for more beds so it acts as a tie-breaker.
-        score = estimated_time_mins - (available_icu_beds * 0.5 if severity == "High" else available_beds * 0.1)
+        # 3. Symptom-specific routing
+        symptoms_lower = symptoms.lower()
+        if "heart" in symptoms_lower or "stroke" in symptoms_lower or "chest pain" in symptoms_lower:
+            if h_type == "multispecialty":
+                score += 35
+                
+        if "fracture" in symptoms_lower or "accident" in symptoms_lower or "bleeding" in symptoms_lower or "burn" in symptoms_lower:
+            if h_type == "emergency":
+                score += 35
+                
+        if "pregnancy" in symptoms_lower or "pregnant" in symptoms_lower:
+            if h_type in ["multispecialty", "general"]:
+                score += 25
+        
+        # Provide fallback coordinates for UI Google Maps linking
+        mock_lat = user_lat + (distance * 0.005)
+        mock_lng = user_lng + (distance * 0.005)
         
         ranked_hospitals.append({
-            "id": h["id"],
-            "name": h["name"],
-            "latitude": h["latitude"],
-            "longitude": h["longitude"],
-            "distance_km": round(distance_km, 2),
-            "estimated_time_mins": estimated_time_mins,
-            "available_beds": available_beds,
-            "available_icu_beds": available_icu_beds,
-            "traffic_level": traffic_level,
-            "has_icu": has_icu,
-            "specialties": str(h.get("specialties")),
+            "id": h.get("id"),
+            "name": name,
+            "latitude": mock_lat,
+            "longitude": mock_lng,
+            "distance_km": distance,
+            "estimated_time_mins": int(distance * 2),
+            "available_beds": beds_available,
+            "available_icu_beds": icu_available,
+            "traffic_level": "Medium",
+            "has_icu": icu_available == 1,
+            "specialties": str(h_type).capitalize(),
             "score": score
         })
     
-    # Sort by lowest score (fastest arrival + best capability)
-    ranked_hospitals.sort(key=lambda x: x["score"])
+    # Select the hospital with the highest score
+    ranked_hospitals.sort(key=lambda x: x["score"], reverse=True)
     
     return {
-        "severity": severity,
+        "severity": severity_raw,
         "is_critical": is_critical,
-        "recommendations": ranked_hospitals[:4] # Return top 4
+        "recommendations": ranked_hospitals
     }
