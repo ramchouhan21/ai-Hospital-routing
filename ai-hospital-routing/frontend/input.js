@@ -161,9 +161,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 longitude: currentLng
             };
 
+            const API_BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+                ? 'http://127.0.0.1:8050' 
+                : 'https://your-render-app-url.onrender.com'; // UPDATE THIS AFTER DEPLOYING TO RENDER
+                
             try {
                 // Call FastAPI backend
-                const response = await fetch("http://127.0.0.1:8050/api/v1/predict", {
+                const response = await fetch(`${API_BASE_URL}/api/v1/predict`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -275,7 +279,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.disabled = true;
 
                 try {
-                    const res = await fetch("http://127.0.0.1:8050/api/v1/generate_report", {
+                    const API_BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+                        ? 'http://127.0.0.1:8050' 
+                        : 'https://your-render-app-url.onrender.com';
+                        
+                    const res = await fetch(`${API_BASE_URL}/api/v1/generate_report`, {
                         method: "POST",
                         headers: {"Content-Type": "application/json"},
                         body: JSON.stringify({
