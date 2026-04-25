@@ -1,0 +1,11 @@
+id,name,distance,icu_available,beds_available,type
+1,City General Hospital,2,0,0,general
+2,Metro Emergency Center,5,1,10,emergency
+3,Apollo Hospital Bangalore,4,1,6,multispecialty
+4,Fortis Hospital Bangalore,6,1,8,multispecialty
+5,Victoria Hospital,3,1,2,government
+6,Local Clinic,1,0,1,clinic
+7,Nagarbhavi Health Center,2,0,3,clinic
+8,KR Puram Hospital,4,1,5,general
+9,Yeshwanthpur Care Center,3,0,2,clinic
+10,Hebbal Medical Center,5,1,7,general

@@ -161,9 +161,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 longitude: currentLng
             };
 
-            const API_BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+            const API_BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '')
                 ? 'http://127.0.0.1:8050' 
-                : 'https://your-render-app-url.onrender.com'; // UPDATE THIS AFTER DEPLOYING TO RENDER
+                : 'https://medroute-api.onrender.com'; // Change to actual Render URL if different
                 
             try {
                 // Call FastAPI backend
@@ -279,9 +279,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.disabled = true;
 
                 try {
-                    const API_BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+                    const API_BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '')
                         ? 'http://127.0.0.1:8050' 
-                        : 'https://your-render-app-url.onrender.com';
+                        : 'https://medroute-api.onrender.com';
                         
                     const res = await fetch(`${API_BASE_URL}/api/v1/generate_report`, {
                         method: "POST",
